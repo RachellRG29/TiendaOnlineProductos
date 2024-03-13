@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/backgroud_agregar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgProducto"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/circular_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.089"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.06" />
+
+        <TextView
+            android:id="@+id/lblDescripcion"
+            android:layout_width="359dp"
+            android:layout_height="60dp"
+            android:fontFamily="@font/gadugi"
+            android:gravity="center"
+            android:text="Descripción"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblPrecio"
+            app:layout_constraintVertical_bias="0.068" />
+
+        <TextView
+            android:id="@+id/lblCodigo"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:gravity="left"
+            android:text="Código"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lineavertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.052" />
+
+        <TextView
+            android:id="@+id/lblNombre"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugi"
+            android:gravity="left"
+            android:text="Nombre"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/lineavertical"
+            app:layout_constraintTop_toBottomOf="@+id/lblCodigo"
+            app:layout_constraintVertical_bias="0.030" />
+
+        <TextView
+            android:id="@+id/lblMarca"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugi"
+            android:gravity="left"
+            android:text="Marca"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lineavertical"
+            app:layout_constraintTop_toBottomOf="@+id/lblNombre"
+            app:layout_constraintVertical_bias="0.041" />
+
+        <TextView
+            android:id="@+id/lblPrecio"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:text="Precio"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/lbltxtprecio"
+            app:layout_constraintTop_toBottomOf="@+id/lblMarca"
+            app:layout_constraintVertical_bias="0.028" />
+
+        <TextView
+            android:id="@+id/lbltxtprecio"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:gravity="right"
+            android:text="$  "
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.068"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgProducto"
+            app:layout_constraintVertical_bias="0.102" />
+
+        <ImageView
+            android:id="@+id/lineavertical"
+            android:layout_width="2dp"
+            android:layout_height="130dp"
+            android:background="@color/redred"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/lblNombre"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imgProducto"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.06" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta de color primaria -->
+    <color name="grey">#474950</color>
+    <color name="blue">#9DDCDC</color>
+    <color name="yellow">#FFEBB7</color>
+    <color name="redred">#E53846</color>
+
+    <color name="cream_blueskye">#F1FAEE</color>
+
+
+
+
+</resources>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    tools:context=".activity_agregar_producto">
+
+    <!-- ACTIVITY AGREGAR PRODUCTOS ONLINE -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- logo app -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/logocompras" />
+
+    <!-- backgroud -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/backgroud_agregar"
+        android:layout_width="wrap_content"
+        android:layout_height="638dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/white">
+
+        <!-- producto -->
+        <!-- imagen del producto -->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgProductoVista"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/circular_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.063"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.081" />
+
+        <Button
+            android:id="@+id/btnCambiarImagen"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/grey"
+            android:foreground="@android:drawable/ic_menu_add"
+            app:layout_constraintBottom_toBottomOf="@+id/imgProductoVista"
+            app:layout_constraintEnd_toEndOf="@+id/imgProductoVista"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/imgProductoVista"
+            app:layout_constraintTop_toTopOf="@+id/imgProductoVista"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/txtCodigo"
+            android:layout_width="210dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:textColor="@color/black"
+            android:hint="Código"
+            android:textColorHint="@color/grey"
+            android:inputType="text"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.463"
+            app:layout_constraintStart_toEndOf="@+id/imgProductoVista"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.072" />
+
+
+        <EditText
+            android:id="@+id/txtNombre"
+            android:layout_width="210dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:hint="Nombre"
+            android:inputType="textPersonName"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintStart_toEndOf="@+id/imgProductoVista"
+            app:layout_constraintTop_toBottomOf="@+id/txtCodigo"
+            app:layout_constraintVertical_bias="0.036" />
+
+        <EditText
+            android:id="@+id/txtMarca"
+            android:layout_width="210dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:hint="Marca"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.099"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNombre"
+            app:layout_constraintVertical_bias="0.072" />
+
+        <EditText
+            android:id="@+id/txtPrecio"
+            android:layout_width="210dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/gadugib"
+            android:hint="Precio"
+            android:inputType="numberDecimal"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.099"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtMarca"
+            app:layout_constraintVertical_bias="0.072" />
+
+        <EditText
+            android:id="@+id/txtDescripcion"
+            android:layout_width="336dp"
+            android:layout_height="60dp"
+            android:fontFamily="@font/gadugib"
+            android:hint="Descripción"
+            android:inputType="textMultiLine"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.457"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtPrecio"
+            app:layout_constraintVertical_bias="0.072" />
+
+        <Button
+            android:id="@+id/btnGuardarProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/bolsa_compra"
+            android:drawableTint="@color/yellow"
+            android:fontFamily="@font/gadugib"
+            android:text="GUARDAR PRODUCTO"
+            android:textColor="@color/yellow"
+            android:textSize="14sp"
+            app:backgroundTint="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtDescripcion"
+            app:layout_constraintVertical_bias="0.446" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- boton regresar  -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnRegresarListaProductos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        app:backgroundTint="@color/redred"
+        android:src="@android:drawable/ic_menu_revert"
+        android:drawableTint="@color/yellow"/>
+
+
+
+</RelativeLayout>
