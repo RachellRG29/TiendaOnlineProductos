@@ -19,7 +19,7 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgProducto"
+            android:id="@+id/imgProductoListVista"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_centerInParent="true"
@@ -120,7 +120,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.068"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgProducto"
+            app:layout_constraintTop_toBottomOf="@+id/imgProductoListVista"
             app:layout_constraintVertical_bias="0.102" />
 
         <ImageView
@@ -131,7 +131,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/lblNombre"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imgProducto"
+            app:layout_constraintStart_toEndOf="@+id/imgProductoListVista"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.06" />
 

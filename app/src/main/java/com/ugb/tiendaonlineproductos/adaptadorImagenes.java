@@ -45,10 +45,8 @@ public class adaptadorImagenes extends BaseAdapter {
     }
     @Override
     public long getItemId(int i) {
-        return Long.parseLong(datosProductosArrayList.get(i).getIdProducto());
+        return i; //Long.parseLong(datosProductosArrayList.get(i).getIdProducto());
     }
-
-    @SuppressLint("MissingInflatedId")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -72,9 +70,8 @@ public class adaptadorImagenes extends BaseAdapter {
             tempVal.setText(misProductos.getDescripcion());
 
             //Imagen----
-            CircleImageView circleImageView = itemView.findViewById(R.id.imgProducto);
+            CircleImageView circleImageView = itemView.findViewById(R.id.imgProductoListVista);
             Bitmap bitmap = BitmapFactory.decodeFile(misProductos.getImgproducto());
-
             circleImageView.setImageBitmap(bitmap);
 
 
@@ -83,8 +80,5 @@ public class adaptadorImagenes extends BaseAdapter {
         }
         return itemView;
     }
-
-
-
 
 }

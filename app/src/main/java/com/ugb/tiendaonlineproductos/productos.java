@@ -1,8 +1,8 @@
 package com.ugb.tiendaonlineproductos;
 
-
 public class productos{
-
+    String _id;
+    String _rev;
     String idProducto;
     String codigo;
     String nombre;
@@ -11,7 +11,9 @@ public class productos{
     String descripcion;
     String imgproducto;
 
-    public productos(String idProducto, String codigo, String nombre, String marca, String precio, String descripcion, String imgproducto) {
+    public productos(String _id, String _rev, String idProducto, String codigo, String nombre, String marca, String precio, String descripcion, String imgproducto) {
+        this._id = _id;
+        this._rev = _rev;
         this.idProducto = idProducto;
         this.codigo = codigo;
         this.nombre = nombre;
@@ -21,6 +23,18 @@ public class productos{
         this.imgproducto = imgproducto;
     }
 
+    public String get_id() {
+        return _id;
+    }
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+    public String get_rev() {
+        return _rev;
+    }
+    public void set_rev(String _rev) {
+        this._rev = _rev;
+    }
     public String getIdProducto() {
         return idProducto;
     }

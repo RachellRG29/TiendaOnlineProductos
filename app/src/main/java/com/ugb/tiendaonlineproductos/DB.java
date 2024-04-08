@@ -13,7 +13,7 @@ public class DB extends SQLiteOpenHelper {
     private  static  final String dbname = "db_productos";
     private  static final int v=1;
 
-    private static  final String SQldb = "CREATE TABLE productos(idProducto integer primary key autoincrement, codigo text, nombre text, marca text, precio text, descripcion text, imgproducto text)";
+    private static  final String SQldb = "CREATE TABLE productos(id text, rev text, idProducto text, codigo text, nombre text, marca text, precio text, descripcion text, imgproducto text)";
 
     public DB(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, dbname, factory, v);
@@ -26,7 +26,7 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    //para actualizar la base de datos
     }
 
     //ADMINISTRAR LOS PRODUCTOS
@@ -34,11 +34,14 @@ public class DB extends SQLiteOpenHelper {
         try {
             SQLiteDatabase db= getWritableDatabase();
             if (accion.equals("nuevo")){
-                db.execSQL("INSERT INTO productos(codigo,nombre,marca,precio,descripcion,imgproducto) VALUES('"+datos[1]+"','"+datos[2]+"','"+datos[3]+"','"+datos[4]+"','"+datos[5]+"','"+datos[6]+"' )");
+                db.execSQL("INSERT INTO productos(id, rev, idProducto,codigo,nombre,marca,precio,descripcion,imgproducto) VALUES('"+ datos[0] +"', '"+ datos[1] +"', '"+
+                        datos[2] +"', '"+ datos[3] +"','"+ datos[4] +"','"+ datos[5] +"','"+ datos[6] +"','"+ datos[7] +"', '"+ datos[8] +"')");
             } else if (accion.equals("modificar")) {
-                db.execSQL("UPDATE productos SET codigo='"+ datos[1] +"', nombre='"+ datos[2] +"', marca='"+ datos[3] +"', precio='"+ datos[4] +"',descripcion='"+ datos[5] +"',imgproducto='"+ datos[6] +"' WHERE idProducto='"+ datos[0] +"' ");
+                db.execSQL("UPDATE productos SET id='"+ datos[0] +"',rev='"+ datos[1] +"', codigo='"+ datos[3] +"',nombre='"+ datos[4] +"',marca='"+
+                datos[5] +"',precio='"+ datos[6] +"',descripcion='"+ datos[7] +"', imgproducto='"+ datos[8] +"' WHERE idProducto='"+ datos[2] +"'");
+
             } else if (accion.equals("eliminar")) {
-                db.execSQL("DELETE FROM productos WHERE idProducto='"+datos[0]+"' ");
+                db.execSQL("DELETE FROM productos WHERE idProducto='"+datos[2]+"' ");
             }
             return "ok";
 
@@ -51,7 +54,7 @@ public class DB extends SQLiteOpenHelper {
    //CURSOS CONSULTAR PRODUCTOS
    public Cursor consultar_productos(){
         SQLiteDatabase db= getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM productos ORDER BY codigo", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM productos ORDER BY nombre", null);
         return cursor;
    }
 

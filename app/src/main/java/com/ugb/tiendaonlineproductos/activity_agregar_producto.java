@@ -1,37 +1,33 @@
 package com.ugb.tiendaonlineproductos;
 
-import static android.provider.MediaStore.EXTRA_MEDIA_ALBUM;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.view.View;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.content.Intent;
-
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import android.provider.MediaStore;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,12 +40,13 @@ public class activity_agregar_producto extends AppCompatActivity {
     private Button btnChangeImage;
     Button btnGuardar;
     TextView tempVal;
-    String accion="nuevo", id="", imgproductourl="";
-    private Uri filePath;
+    String accion="nuevo", id="", imgproductourl="", rev="", idProducto="";
+    Uri filePath;
+    Bitmap bitmap;
     FloatingActionButton btnIrvista;
-    Intent guardarFotoIntent;
+    Intent almacenarFotoIntent;
+    utilidades utls;
 
-    @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +85,9 @@ public class activity_agregar_producto extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                guardarImagen();
+
+               // almacenarImagenProducto();
+
             //validar campo obligatorio
                 if(txtcodigo.getText().toString().isEmpty() || txtnombre.getText().toString().isEmpty() ||
                         txtmarca.getText().toString().isEmpty() || txtprecio.getText().toString().isEmpty() ||
@@ -103,41 +102,68 @@ public class activity_agregar_producto extends AppCompatActivity {
                 } else {
                     //VALIDAR AGREGAR PRODUCTO
 
-                    tempVal = findViewById(R.id.txtCodigo);
-                    String codigo = tempVal.getText().toString();
+                    try {
+                        tempVal = findViewById(R.id.txtCodigo);
+                        String codigo = tempVal.getText().toString();
 
-                    tempVal = findViewById(R.id.txtNombre);
-                    String nombre = tempVal.getText().toString();
+                        tempVal = findViewById(R.id.txtNombre);
+                        String nombre = tempVal.getText().toString();
 
-                    tempVal = findViewById(R.id.txtMarca);
-                    String marca = tempVal.getText().toString();
+                        tempVal = findViewById(R.id.txtMarca);
+                        String marca = tempVal.getText().toString();
 
-                    tempVal = findViewById(R.id.txtPrecio);
-                    String precio = tempVal.getText().toString();
+                        tempVal = findViewById(R.id.txtPrecio);
+                        String precio = tempVal.getText().toString();
 
-                    tempVal = findViewById(R.id.txtDescripcion);
-                    String descripcion = tempVal.getText().toString();
+                        tempVal = findViewById(R.id.txtDescripcion);
+                        String descripcion = tempVal.getText().toString();
 
-                    imageCirProducto= findViewById(R.id.imgProductoVista);
-                    imgproductourl = tempVal.getText().toString();
+                        //GUARDAR DATOS SERVIDOR
+                        JSONObject datosProductos = new JSONObject();
+                        if (accion.equals("modificar") && id.length() > 0 && rev.length() > 0) {
+                            datosProductos.put("_id", id);
+                            datosProductos.put("_rev", rev);
+                        }
+                        datosProductos.put("idProducto", idProducto);
+                        datosProductos.put("codigo", codigo);
+                        datosProductos.put("nombre", nombre);
+                        datosProductos.put("marca", marca);
+                        datosProductos.put("precio", precio);
+                        datosProductos.put("descripcion", descripcion);
+                        datosProductos.put("imgproducto", imgproductourl);
+                        String respuesta = "";
 
+                        enviarDatosServidor objGuardarDatosServidor = new enviarDatosServidor(getApplicationContext());
+                        respuesta = objGuardarDatosServidor.execute(datosProductos.toString()).get();
 
+                        JSONObject respuestaJSONObject = new JSONObject(respuesta);
+                        if (respuestaJSONObject.getBoolean("ok")) {
+                            id = respuestaJSONObject.getString("id");
+                            rev = respuestaJSONObject.getString("rev");
+                        } else {
+                            respuesta = "Error al guardar en servidor: " + respuesta;
+                        }
 
-                    DB db = new DB(getApplicationContext(),"", null, 1);
-                    String[] datos = new String[]{id,codigo,nombre,marca,precio,descripcion, imgproductourl};
-                    String respuesta = db.administrar_productos(accion, datos);
-                    if( respuesta.equals("ok") ){
-                        Toast.makeText(getApplicationContext(), "Producto Registrado con Exito.", Toast.LENGTH_SHORT).show();
-                        irVista();
-                    }else{
-                        Toast.makeText(getApplicationContext(), "Error: "+ respuesta, Toast.LENGTH_LONG).show();
+                        DB db = new DB(getApplicationContext(), "", null, 1);
+                        String[] datos = new String[]{id, rev, idProducto, codigo, nombre, marca, precio, descripcion, imgproductourl};
+                        respuesta = db.administrar_productos(accion, datos);
+                        if (respuesta.equals("ok")) {
+                            Toast.makeText(getApplicationContext(), "Producto Registrado con Exito.", Toast.LENGTH_SHORT).show();
+                            irVista();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error: " + respuesta, Toast.LENGTH_LONG).show();
+                        }
+
+                    } //cierre validar campo obligatorio
+                    catch (Exception e) {
+                        mostrarMsg("Error al guardar: " + e.getMessage());
                     }
-
-                } //cierre validar campo obligatorio
-
+                }
             }
         });
+
         mostrarDatosProductos(); //mostrar los datos del producto
+
         //
     } //ONCREATE
 
@@ -148,43 +174,6 @@ public class activity_agregar_producto extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Seleccionar imagen"), PICK_IMAGE_REQUEST);
     }
 
-    private File crearImagenProducto() throws Exception{
-        String fechaHoraMs = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "imagen_"+ fechaHoraMs +"_";
-
-        File dirAlmacenamiento = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-        if( !dirAlmacenamiento.exists() ){
-            dirAlmacenamiento.mkdirs();
-        }
-        File image = File.createTempFile(fileName, ".jpg", dirAlmacenamiento);
-        File fotoProducto = null;
-        imgproductourl = image.getAbsolutePath();
-
-        return image;
-    }
-
-    private void guardarImagen(){
-        guardarFotoIntent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-
-        if (guardarFotoIntent.resolveActivity(getPackageManager())!=null ){
-            File fotoProducto = null;
-            try {
-                fotoProducto = crearImagenProducto();
-                if( fotoProducto!=null ){
-                    Uri uriFotoProducto = FileProvider.getUriForFile(activity_agregar_producto.this, "com.ugb.tiendaonlineproductos.fileprovider", fotoProducto);
-                    guardarFotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriFotoProducto);
-                    startActivityForResult(guardarFotoIntent, 1);
-                }else{
-                    mostrarMsg("NO pude guardar la foto");
-                }
-            }catch (Exception e){
-                mostrarMsg("ERROR al guardar la foto");
-            }
-        }
-
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -192,17 +181,48 @@ public class activity_agregar_producto extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
             imgproductourl = filePath.toString();
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 imageCirProducto.setImageBitmap(bitmap);
 
+                almacenarImagenProducto();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
 
+    //REVISAR POR Q NO ALMACENA LA IMAGEN
+
+    private void almacenarImagenProducto(){
+        File fotoProducto = null;
+        try{
+            fotoProducto = crearImagenProducto();
+            if(fotoProducto!=null){
+               // filePath = FileProvider.getUriForFile(activity_agregar_producto.this, "com.ugb.tiendaonlineproductos.fileprovider", fotoProducto);
+                almacenarFotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
+                startActivityForResult(almacenarFotoIntent, 1);
+            }else{
+                mostrarMsg("No pude almacenar la foto");
+            }
+        }catch (Exception e){
+            mostrarMsg("Error al almacenar la foto: "+ e.getMessage());
+        }
+    }
+
+    private File crearImagenProducto() throws Exception{
+
+        String fechaHoraMs = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "imagen/*"+ fechaHoraMs +"_";
+         File dirAlmacenamiento = new File(getExternalFilesDir(Environment.DIRECTORY_DCIM), "productos");
+        //File dirAlmacenamiento = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+        if( !dirAlmacenamiento.exists() ){
+            dirAlmacenamiento.mkdirs();
+        }
+        File image = File.createTempFile(fileName, ".jpg", dirAlmacenamiento);
+        imgproductourl = image.getAbsolutePath();
+        return image;
     }
 
     private void irVista(){
@@ -210,40 +230,41 @@ public class activity_agregar_producto extends AppCompatActivity {
         startActivity(abrirVentana);
     }
 
-  private void mostrarDatosProductos(){
-        try{
-            Bundle parametros= getIntent().getExtras();
+    private void mostrarDatosProductos(){
+        try {
+            Bundle parametros = getIntent().getExtras();
             accion = parametros.getString("accion");
-            if (accion.equals("modificar")){
-                String[] datos= parametros.getStringArray("productos");
-                id = datos[0];
+            if( accion.equals("modificar") ){
+                JSONObject jsonObject = new JSONObject(parametros.getString("productos")).getJSONObject("value");
+                id = jsonObject.getString("_id");
+                rev = jsonObject.getString("_rev");
+                idProducto = jsonObject.getString("idProducto");
 
                 tempVal = findViewById(R.id.txtCodigo);
-                tempVal.setText(datos[1]);
+                tempVal.setText(jsonObject.getString("codigo"));
 
                 tempVal = findViewById(R.id.txtNombre);
-                tempVal.setText(datos[2]);
+                tempVal.setText(jsonObject.getString("nombre"));
 
                 tempVal = findViewById(R.id.txtMarca);
-                tempVal.setText(datos[3]);
+                tempVal.setText(jsonObject.getString("marca"));
 
                 tempVal = findViewById(R.id.txtPrecio);
-                tempVal.setText(datos[4]);
+                tempVal.setText(jsonObject.getString("precio"));
 
                 tempVal = findViewById(R.id.txtDescripcion);
-                tempVal.setText(datos[5]);
+                tempVal.setText(jsonObject.getString("descripcion"));
 
-
-                imageCirProducto= findViewById(R.id.imgProductoVista);
-                imgproductourl = tempVal.getText().toString();
-                imgproductourl = datos[6];
-
+                imgproductourl = jsonObject.getString("imgproducto");
+                Bitmap bitmap = BitmapFactory.decodeFile(imgproductourl);
+                imageCirProducto.setImageBitmap(bitmap);
+            }else{ //nuevo registro
+                idProducto = utls.generarIdUnico();
             }
-        } catch (Exception e){
-            mostrarMsg("Error al mostrar los datos: "+e.getMessage());
+        }catch (Exception e){
+            mostrarMsg("Error al mostrar los datos: "+ e.getMessage());
         }
-
-  }
+    }
 
     private void mostrarMsg(String msg){
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
