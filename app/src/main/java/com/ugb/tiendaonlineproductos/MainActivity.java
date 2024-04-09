@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 irAgregar(parametros);
             }
         });
-
         try{
             di = new detectarInternet(getApplicationContext());
             if(di.hayConexionInternet()){
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             mostrarMsg("Error al detectar si hay conexion "+ e.getMessage());
         }
         buscarProductos();
-
     }
 
     private void obtenerDatosProductosServidor(){
@@ -141,9 +139,13 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mimenu, menu);
 
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        cProductos.moveToPosition(info.position);
-        menu.setHeaderTitle(cProductos.getString(1));//1 es el nombre del producto
+        try {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            posicion = info.position;
+            menu.setHeaderTitle(datosJSON.getJSONObject(posicion).getJSONObject("value").getString("nombre"));
+        }catch (Exception e){
+            mostrarMsg("Error al mostrar el menu: "+ e.getMessage());
+        }
     }
 
     //Agregar, modificar y eliminar
@@ -160,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
                     parametros.putString("productos", datosJSON.getJSONObject(posicion).toString());
                     irAgregar(parametros);
                     break;
-
                 case R.id.mnxEliminar:
                     eliminarProductos();
                     break;
@@ -208,8 +209,6 @@ public class MainActivity extends AppCompatActivity {
         try{
             dbProductos = new DB(MainActivity.this, "", null, 1);
             cProductos = dbProductos.consultar_productos();
-
-
             if ( cProductos.moveToFirst() ){
                 datosJSON = new JSONArray();
                 do{
@@ -227,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
                     jsonObjectValue.put("value", jsonObject);
                     datosJSON.put(jsonObjectValue);
-                    alProductos.add(misProductos);
+                    //alProductos.add(misProductos);
                 }while(cProductos.moveToNext());
                 mostrarDatosProductos();
             }else{

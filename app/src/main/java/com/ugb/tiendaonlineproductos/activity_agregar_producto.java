@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -35,16 +36,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class activity_agregar_producto extends AppCompatActivity {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
     CircleImageView imageCirProducto;
     private Button btnChangeImage;
     Button btnGuardar;
     TextView tempVal;
     String accion="nuevo", id="", imgproductourl="", rev="", idProducto="";
-    Uri filePath;
-    Bitmap bitmap;
     FloatingActionButton btnIrvista;
-    Intent almacenarFotoIntent;
+    Intent tomarFotoIntent;
     utilidades utls;
 
     @Override
@@ -67,7 +65,8 @@ public class activity_agregar_producto extends AppCompatActivity {
         btnChangeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               openGallery();
+               tomarFotoProducto();
+
             }
         });
 
@@ -85,8 +84,6 @@ public class activity_agregar_producto extends AppCompatActivity {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-               // almacenarImagenProducto();
 
             //validar campo obligatorio
                 if(txtcodigo.getText().toString().isEmpty() || txtnombre.getText().toString().isEmpty() ||
@@ -158,7 +155,7 @@ public class activity_agregar_producto extends AppCompatActivity {
                     catch (Exception e) {
                         mostrarMsg("Error al guardar: " + e.getMessage());
                     }
-                }
+                } //validar campos obligatorios :3
             }
         });
 
@@ -167,56 +164,42 @@ public class activity_agregar_producto extends AppCompatActivity {
         //
     } //ONCREATE
 
-    private void openGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Seleccionar imagen"), PICK_IMAGE_REQUEST);
-    }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            imgproductourl = filePath.toString();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageCirProducto.setImageBitmap(bitmap);
-
-                almacenarImagenProducto();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        try{
+            if( requestCode==1 && resultCode==RESULT_OK ){
+                Bitmap imagenBitmap = BitmapFactory.decodeFile(imgproductourl);
+                imageCirProducto.setImageBitmap(imagenBitmap);
+            }else{
+                mostrarMsg("Se cancelo la toma de la foto");
             }
+        }catch (Exception e){
+            mostrarMsg("Error al mostrar la camara: "+ e.getMessage());
         }
     }
+    private void tomarFotoProducto(){
+        tomarFotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    //REVISAR POR Q NO ALMACENA LA IMAGEN
-
-    private void almacenarImagenProducto(){
         File fotoProducto = null;
         try{
             fotoProducto = crearImagenProducto();
-            if(fotoProducto!=null){
-               // filePath = FileProvider.getUriForFile(activity_agregar_producto.this, "com.ugb.tiendaonlineproductos.fileprovider", fotoProducto);
-                almacenarFotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
-                startActivityForResult(almacenarFotoIntent, 1);
+            if( fotoProducto!=null ){
+                Uri uriFotoAmigo = FileProvider.getUriForFile(activity_agregar_producto.this, "com.ugb.tiendaonlineproductos.fileprovider", fotoProducto);
+                tomarFotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriFotoAmigo);
+                startActivityForResult(tomarFotoIntent, 1);
             }else{
-                mostrarMsg("No pude almacenar la foto");
+                mostrarMsg("NO pude tomar la foto");
             }
         }catch (Exception e){
-            mostrarMsg("Error al almacenar la foto: "+ e.getMessage());
+            mostrarMsg("Error al tomar la foto: "+ e.getMessage());
         }
+
     }
-
     private File crearImagenProducto() throws Exception{
-
         String fechaHoraMs = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "imagen/*"+ fechaHoraMs +"_";
-         File dirAlmacenamiento = new File(getExternalFilesDir(Environment.DIRECTORY_DCIM), "productos");
-        //File dirAlmacenamiento = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+        String fileName = "imagen_"+ fechaHoraMs +"_";
+        File dirAlmacenamiento = getExternalFilesDir(Environment.DIRECTORY_DCIM);
         if( !dirAlmacenamiento.exists() ){
             dirAlmacenamiento.mkdirs();
         }
@@ -225,7 +208,33 @@ public class activity_agregar_producto extends AppCompatActivity {
         return image;
     }
 
-    private void irVista(){
+    //Agarra la foto de la galeria y la convierte a Uri filepath-GALERIA-NO funciono
+   /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imageCirProducto.setImageBitmap(bitmap);
+
+            } catch (Exception e){
+                mostrarMsg("Error: "+ e.getMessage());
+            }
+        }
+    }
+
+    //Abrir galeria
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*"); //importante para la imagen
+        intent.setAction(Intent.ACTION_GET_CONTENT); //action para tomar foto
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar imagen"), PICK_IMAGE_REQUEST); //seleccionar foto
+        intent.putExtra(MediaStore.Images.Media.DATA, filePath); //aqui se debe almacenar
+    }*/
+
+
+    private void irVista(){ //regresar vista o lista productos
         Intent abrirVentana = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(abrirVentana);
     }
