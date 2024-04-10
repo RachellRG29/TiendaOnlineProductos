@@ -26,11 +26,11 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    //para actualizar la base de datos
+        //para actualizar la base de datos
     }
 
     //ADMINISTRAR LOS PRODUCTOS
-   public String administrar_productos(String accion, String[] datos){
+    public String administrar_productos(String accion, String[] datos){
         try {
             SQLiteDatabase db= getWritableDatabase();
             if (accion.equals("nuevo")){
@@ -38,7 +38,7 @@ public class DB extends SQLiteOpenHelper {
                         datos[2] +"', '"+ datos[3] +"','"+ datos[4] +"','"+ datos[5] +"','"+ datos[6] +"','"+ datos[7] +"', '"+ datos[8] +"')");
             } else if (accion.equals("modificar")) {
                 db.execSQL("UPDATE productos SET id='"+ datos[0] +"',rev='"+ datos[1] +"', codigo='"+ datos[3] +"',nombre='"+ datos[4] +"',marca='"+
-                datos[5] +"',precio='"+ datos[6] +"',descripcion='"+ datos[7] +"', imgproducto='"+ datos[8] +"' WHERE idProducto='"+ datos[2] +"'");
+                        datos[5] +"',precio='"+ datos[6] +"',descripcion='"+ datos[7] +"', imgproducto='"+ datos[8] +"' WHERE idProducto='"+ datos[2] +"'");
 
             } else if (accion.equals("eliminar")) {
                 db.execSQL("DELETE FROM productos WHERE idProducto='"+datos[2]+"' ");
@@ -49,13 +49,13 @@ public class DB extends SQLiteOpenHelper {
             return  "Error: "+ e.getMessage();
 
         }
-   }
+    }
 
-   //CURSOS CONSULTAR PRODUCTOS
-   public Cursor consultar_productos(){
+    //CURSOS CONSULTAR PRODUCTOS
+    public Cursor consultar_productos(){
         SQLiteDatabase db= getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM productos ORDER BY nombre", null);
         return cursor;
-   }
+    }
 
 }

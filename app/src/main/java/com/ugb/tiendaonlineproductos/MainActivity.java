@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                                     nombre.toLowerCase().trim().contains(valor) ||
                                     marca.trim().contains(valor) ||
                                     precio.trim().toLowerCase().contains(valor) ||
-                                            descripcion.trim().toLowerCase().contains(valor) ){
+                                    descripcion.trim().toLowerCase().contains(valor) ){
                                 alProductos.add(productos);
                             }
                         }
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-}
+    }
 
     //Metodo para ir al activity de agregar
     private void irAgregar(Bundle parametros){
@@ -308,6 +308,4 @@ public class MainActivity extends AppCompatActivity {
     } //fin cambiar colorbarraestado
 
 
-
 }
-
